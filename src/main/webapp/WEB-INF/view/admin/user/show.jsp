@@ -56,7 +56,6 @@
                                                                 <th>${user.id}</th>
                                                                 <td>${user.email}</td>
                                                                 <td>${user.fullName}</td>
-                                                                <td>${user.fullName}</td>
                                                                 <td>${user.role.name}</td>
 
                                                                 <td>
