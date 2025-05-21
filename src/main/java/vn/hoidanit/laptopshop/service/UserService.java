@@ -32,9 +32,7 @@ public class UserService {
     }
 
     public User handleSaveUser(User user) {
-        User hieuduong = this.userRepository.save(user);
-        System.out.println(hieuduong);
-        return hieuduong;
+        return this.userRepository.save(user);
     }
 
     public User getUserById(long id) {

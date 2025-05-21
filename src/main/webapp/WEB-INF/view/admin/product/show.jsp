@@ -12,7 +12,7 @@
                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     <meta name="description" content="HoaSatoru - Dự án laptopshop" />
                     <meta name="author" content="HoaSatoru" />
-                    <title>Dashboard - Dương Hiếu</title>
+                    <title>Product - HieuDuong</title>
                     <link href="/css/styles.css" rel="stylesheet" />
                     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
                         crossorigin="anonymous"></script>

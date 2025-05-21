@@ -22,4 +22,12 @@ public class ProductService {
     public Product createProduct(Product pr) {
         return this.productRepository.save(pr);
     }
+
+    public Product fetchProductById(long id) {
+        return this.productRepository.findById(id);
+    }
+
+    public void deleteAProduct(long id) {
+        this.productRepository.deleteById(id);
+    }
 }

@@ -91,7 +91,7 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
-    @RequestMapping("/admin/user/update/{id}")
+    @GetMapping("/admin/user/update/{id}")
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
@@ -99,12 +99,12 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(Model model, @ModelAttribute("newUser") User hoidanit) {
-        User currentUser = this.userService.getUserById(hoidanit.getId());
+    public String postUpdateUser(Model model, @ModelAttribute("newUser") User hieuduong) {
+        User currentUser = this.userService.getUserById(hieuduong.getId());
         if (currentUser != null) {
-            currentUser.setAddress(hoidanit.getAddress());
-            currentUser.setFullName(hoidanit.getFullName());
-            currentUser.setPhone(hoidanit.getPhone());
+            currentUser.setAddress(hieuduong.getAddress());
+            currentUser.setFullName(hieuduong.getFullName());
+            currentUser.setPhone(hieuduong.getPhone());
             this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
@@ -120,8 +120,8 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/delete")
-    public String postDeleteUser(Model model, @ModelAttribute("newUser") User eric) {
-        this.userService.deleteAUser(eric.getId());
+    public String postDeleteUser(Model model, @ModelAttribute("newUser") User hieuduong) {
+        this.userService.deleteAUser(hieuduong.getId());
         return "redirect:/admin/user";
     }
 }

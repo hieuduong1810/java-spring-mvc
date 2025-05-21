@@ -11,13 +11,19 @@
                     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     <meta name="description" content="HieuDuong - Dự án laptopshop" />
-                    <meta name="author" content="HoaSatoru" />
-                    <title>Create Product</title>
+                    <meta name="author" content="HieuDuong" />
+                    <title>Update Product</title>
                     <link href="/css/styles.css" rel="stylesheet" />
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                     <script>
                         $(document).ready(() => {
                             const avatarFile = $("#avatarFile");
+                            const orgImage = "${newProduct.image}"
+                            if (orgImage) {
+                                const urlImage = "/images/product/" + orgImage;
+                                $("#avatarPreview").attr("src", urlImage);
+                                $("#avatarPreview").css({ "display": "block" });
+                            }
                             avatarFile.change(function (e) {
                                 const imgURL = URL.createObjectURL(e.target.files[0]);
                                 $("#avatarPreview").attr("src", imgURL);
@@ -44,9 +50,9 @@
                                     <div class="container mt-5">
                                         <div class="row">
                                             <div class="col-md-6 col-12 mx-auto">
-                                                <h3>Create a product </h3>
+                                                <h3>Update a product </h3>
                                                 <hr>
-                                                <form:form method="post" action="/admin/product/create"
+                                                <form:form method="post" action="/admin/product/update"
                                                     modelAttribute="newProduct" class="row"
                                                     enctype="multipart/form-data">
                                                     <c:set var="errorName">
@@ -64,6 +70,10 @@
                                                     <c:set var="errorQuantity">
                                                         <form:errors path="quantity" cssClass="invalid-feedback" />
                                                     </c:set>
+                                                    <div class="mb-3" style="display: none;">
+                                                        <label class="form-label">ID:</label>
+                                                        <form:input type="number" class="form-control" path="id" />
+                                                    </div>
                                                     <div class="mb-3 col-12 col-md-6">
                                                         <label class="form-label">Name:</label>
                                                         <form:input type="name"
@@ -134,7 +144,7 @@
                                                             alt="avatar preview" id="avatarPreview">
                                                     </div>
                                                     <div class="col-12 mb-5">
-                                                        <button type="submit" class="btn btn-primary">Create</button>
+                                                        <button type="submit" class="btn btn-warning">Update</button>
                                                     </div>
 
                                                 </form:form>
