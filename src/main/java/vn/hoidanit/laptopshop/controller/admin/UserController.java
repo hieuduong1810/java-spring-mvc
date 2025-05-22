@@ -24,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserController {
     private final UserService userService;
     private final UploadService uploadService;
-    private final PasswordEncoder PasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserController(
             UserService userService,
@@ -32,7 +32,7 @@ public class UserController {
             PasswordEncoder PasswordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
-        this.PasswordEncoder = PasswordEncoder;
+        this.passwordEncoder = PasswordEncoder;
     }
 
     @RequestMapping("/")
@@ -71,17 +71,18 @@ public class UserController {
             @ModelAttribute("newUser") @Valid User hieuduong,
             BindingResult newUserBindingResult,
             @RequestParam("hieuduongFile") MultipartFile file) {
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
-        }
+        // List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        // for (FieldError error : errors) {
+        // System.out.println(">>>>" + error.getField() + " - " +
+        // error.getDefaultMessage());
+        // }
         // validate
         if (newUserBindingResult.hasErrors()) {
             return "/admin/user/create";
         }
         //
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        String hashPassword = this.PasswordEncoder.encode(hieuduong.getPassword());
+        String hashPassword = this.passwordEncoder.encode(hieuduong.getPassword());
 
         hieuduong.setAvatar(avatar);
         hieuduong.setPassword(hashPassword);

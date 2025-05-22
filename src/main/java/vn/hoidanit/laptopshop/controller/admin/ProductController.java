@@ -57,10 +57,7 @@ public class ProductController {
             @ModelAttribute("newProduct") @Valid Product hieuduong,
             BindingResult newUserBindingResult,
             @RequestParam("hieuduongFile") MultipartFile file) {
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
-        }
+
         // validate
         if (newUserBindingResult.hasErrors()) {
             return "/admin/product/create";
