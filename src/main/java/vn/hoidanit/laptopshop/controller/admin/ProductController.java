@@ -39,7 +39,7 @@ public class ProductController {
 
     @GetMapping("/admin/product/{id}")
     public String getProductDetailPage(Model model, @PathVariable long id) {
-        Product product = this.productService.fetchProductById(id);
+        Product product = this.productService.fetchProductById(id).get();
         model.addAttribute("product", product);
         model.addAttribute("id", id);
         return "admin/product/detail";
@@ -73,7 +73,7 @@ public class ProductController {
 
     @GetMapping("admin/product/update/{id}")
     public String getUpdateProductPage(Model model, @PathVariable long id) {
-        Product currentProduct = this.productService.fetchProductById(id);
+        Product currentProduct = this.productService.fetchProductById(id).get();
         model.addAttribute("newProduct", currentProduct);
         return "admin/product/update";
     }
@@ -93,7 +93,7 @@ public class ProductController {
         if (newUserBindingResult.hasErrors()) {
             return "/admin/product/create";
         }
-        Product currentProduct = this.productService.fetchProductById((hieuduong.getId()));
+        Product currentProduct = this.productService.fetchProductById((hieuduong.getId())).get();
         if (currentProduct != null) {
             // update new image
             if (!file.isEmpty()) {

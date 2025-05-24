@@ -9,11 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import vn.hoidanit.laptopshop.service.validator.StrongPassword;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +47,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
 
     public Role getRole() {
         return role;
@@ -92,6 +95,10 @@ public class User {
         this.avatar = avatar;
     }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     public long getId() {
         return id;
     }
@@ -118,6 +125,10 @@ public class User {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public Cart getCart() {
+        return cart;
     }
 
     @Override
