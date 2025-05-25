@@ -150,104 +150,80 @@
 
 
 
-    // $('.quantity button').on('click', function () {
-    //     let change = 0
+    $('.quantity button').on('click', function () {
+        let change = 0
 
-    //     var button = $(this);
-    //     var oldValue = button.parent().parent().find('input').val();
+        var button = $(this);
+        var oldValue = button.parent().parent().find('input').val();
 
-    //     if (button.hasClass('btn-plus')) {
-    //         var newVal = parseFloat(oldValue) + 1;
-    //         change = 1;
-    //     } else {
-    //         if (oldValue > 1) {
-    //             var newVal = parseFloat(oldValue) - 1;
-    //             change = -1;
-    //         }
-    //         else {
-    //             newVal = 1;
-    //         }
-    //     }
-    //     const input = button.parent().parent().find('input');
-    //     input.val(newVal);
-
-    //     //get price
-    //     const price = input.attr("data-cart-detail-price");
-    //     const id = input.attr("data-cart-detail-id");
-
-    //     const priceElement = $(`p[data-cart-detail-id="${id}"]`);
-
-    //     if (priceElement) {
-    //         const newPrice = +price * newVal;
-    //         priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
-    //     }
-
-    //     //update total cart price
-    //     const totalPriceElement = $(`p[data-cart-detail-price]`);
-
-    //     if (totalPriceElement && totalPriceElement.length) {
-    //         const currentTotal = +totalPriceElement.first().attr("data-cart-detail-price");
-    //         let newTotal = +currentTotal;
-    //         if (change === 0) {
-    //             newTotal = +currentTotal;
-    //         } else {
-    //             newTotal = change * (+price) + (+currentTotal);
-    //         }
-
-    //         //reset change
-    //         change = 0;
-
-    //         //update
-    //         totalPriceElement.each(function (index, element) {
-    //             //update text
-    //             $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");
-
-    //             //update data attribute
-    //             $(totalPriceElement[index]).attr("data-cart-detail-price", newTotal);
-    //         })
-    //     }
-
-    // })
-
-    // function formatCurrency(value) {
-    //     const formatter = new Intl.NumberFormat('vi-VN', {
-    //         style: 'decimal',
-    //         minimumFractionDigits: 0,
-    //     });
-
-    //     let formatted = formatter.format(value);
-    //     formatted = formatted.replace(/,/g, '.');
-    //     return formatted;
-    // }
-
-    function updateCartTotal() {
-        let total = 0;
-        $("tbody tr").each(function () {
-            let quantity = parseInt($(this).find(".quantity input").val());
-            let price = parseFloat($(this).find("td:nth-child(3) p").text().replace(" đ", "").replace(/,/g, ""));
-            let totalPrice = quantity * price;
-            $(this).find("td:nth-child(5) p").text(totalPrice.toLocaleString() + " đ");
-            total += totalPrice;
-        });
-        $(".bg-light .d-flex p").first().text(total.toLocaleString() + " đ");
-        $(".py-4 p").last().text(total.toLocaleString() + " đ");
-    }
-
-    $(".btn-plus").click(function () {
-        let input = $(this).closest(".quantity").find("input");
-        let value = parseInt(input.val());
-        input.val(value + 1);
-        updateCartTotal();
-    });
-
-    $(".btn-minus").click(function () {
-        let input = $(this).closest(".quantity").find("input");
-        let value = parseInt(input.val());
-        if (value > 1) {
-            input.val(value - 1);
-            updateCartTotal();
+        if (button.hasClass('btn-plus')) {
+            var newVal = parseFloat(oldValue) + 1;
+            change = 1;
+        } else {
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+                change = -1;
+            }
+            else {
+                newVal = 1;
+            }
         }
-    });
+        const input = button.parent().parent().find('input');
+        input.val(newVal);
+
+        //set form index
+        const index = input.attr("data-cart-detail-index");
+        const el = document.getElementById(`cartDetails${index}.quantity`);
+        $(el).val(newVal);
+
+        //get price
+        const price = input.attr("data-cart-detail-price");
+        const id = input.attr("data-cart-detail-id");
+
+        const priceElement = $(`p[data-cart-detail-id="${id}"]`);
+
+        if (priceElement) {
+            const newPrice = +price * newVal;
+            priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
+        }
+
+        //update total cart price
+        const totalPriceElement = $(`p[data-cart-total-price]`);
+
+        if (totalPriceElement && totalPriceElement.length) {
+            const currentTotal = +totalPriceElement.first().attr("data-cart-total-price");
+            let newTotal = +currentTotal;
+            if (change === 0) {
+                newTotal = +currentTotal;
+            } else {
+                newTotal = change * (+price) + (+currentTotal);
+            }
+
+            //reset change
+            change = 0;
+
+            //update
+            totalPriceElement.each(function (index, element) {
+                //update text
+                $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");
+
+                //update data attribute
+                $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);
+            })
+        }
+
+    })
+
+    function formatCurrency(value) {
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+        });
+
+        let formatted = formatter.format(value);
+        formatted = formatted.replace(/\./g, ',');
+        return formatted;
+    }
 
 
 

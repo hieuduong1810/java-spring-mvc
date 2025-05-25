@@ -1,6 +1,5 @@
 package vn.hoidanit.laptopshop.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,4 +93,41 @@ public class ProductService {
     public Cart fetchByUser(User user) {
         return this.cartRepository.findByUser(user);
     }
+
+    public void handelRemoveCartDetail(long id, HttpSession session) {
+        Optional<CartDetail> detailCartOpt = this.cartDetailRepository.findById(id);
+        if (detailCartOpt.isPresent()) {
+            CartDetail cartDetail = detailCartOpt.get();
+            Cart currentCart = cartDetail.getCart();
+
+            // Xóa cart detail trước
+            this.cartDetailRepository.deleteById(id);
+
+            // Kiểm tra số lượng cartDetail còn lại
+            if (currentCart.getSum() > 1) {
+                // Cập nhật sum trong cart
+                int newSum = currentCart.getSum() - 1;
+                currentCart.setSum(newSum);
+                this.cartRepository.save(currentCart);
+                session.setAttribute("sum", newSum);
+            } else {
+                // Nếu không còn cartDetail nào, xóa luôn cart
+                this.cartRepository.deleteById(currentCart.getId());
+                session.setAttribute("sum", 0);
+            }
+        }
+    }
+
+    public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
+        for (CartDetail cartDetail : cartDetails) {
+            // Cập nhật lại giá của từng sản phẩm trong giỏ hàng
+            Optional<CartDetail> detailOpt = this.cartDetailRepository.findById(cartDetail.getId());
+            if (detailOpt.isPresent()) {
+                CartDetail detail = detailOpt.get();
+                detail.setQuantity(cartDetail.getQuantity());
+                this.cartDetailRepository.save(detail);
+            }
+        }
+    }
+
 }
