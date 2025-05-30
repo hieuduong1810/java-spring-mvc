@@ -109,16 +109,25 @@
                                                 </button>
                                             </div>
                                             <input type="text" class="form-control form-control-sm text-center border-0"
-                                                value="1">
+                                                value="1" data-cart-detail-index="0">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <a href="#"
-                                            class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                                class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                        <form action="/add-product-form-view-detail" method="post"
+                                            modelAttribute="product">
+                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                            <input class="form-control d-none" type="text" name="id"
+                                                value="${product.id}" />
+                                            <input class="form-control d-none" type="text" name="quantity"
+                                                id="cartDetails0.quantity" />
+                                            <button
+                                                class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"><i
+                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                Thêm vào giỏ hàng</button>
+                                        </form>
                                     </div>
                                     <div class="col-lg-12">
                                         <nav>
@@ -155,7 +164,7 @@
                                             <ul class="list-unstyled fruite-categorie">
                                                 <li>
                                                     <div class="d-flex justify-content-between fruite-name">
-                                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Apples</a>
+                                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Apple</a>
                                                         <span>(3)</span>
                                                     </div>
                                                 </li>

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.service.OrderService;
 import vn.hoidanit.laptopshop.service.ProductService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +21,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ItemController {
     private final ProductService productService;
+    private final OrderService orderService;
 
-    public ItemController(ProductService productService) {
+    public ItemController(ProductService productService, OrderService orderService) {
         this.productService = productService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/product/{id}")
@@ -35,6 +38,7 @@ public class ItemController {
         Product product = this.productService.fetchProductById(id).get();
         model.addAttribute("product", product);
         model.addAttribute("id", id);
+
         return "client/product/detail";
     }
 
@@ -45,7 +49,7 @@ public class ItemController {
         long productId = id;
         String email = (String) session.getAttribute("email");
 
-        this.productService.handeAddProductToCart(email, productId, session);
+        this.productService.handeAddProductToCart(email, productId, session, 1);
 
         return "redirect:/";
     }
@@ -121,12 +125,46 @@ public class ItemController {
         return "redirect:/checkout";
     }
 
+    @GetMapping("/thanks")
+    public String getThankYouPage(Model model) {
+        return "client/cart/thanks";
+    }
+
     @PostMapping("/place-order")
     public String handlePlaceOrder(HttpServletRequest request,
             @RequestParam("receiverName") String receiverName,
             @RequestParam("receiverPhone") String receiverPhone,
             @RequestParam("receiverAddress") String receiverAddress) {
+        User currentUser = new User();
         HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
+
+        this.productService.handlePlaceOrder(currentUser, session, receiverAddress, receiverName, receiverPhone);
+
+        return "redirect:/thanks";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        long userId = (long) session.getAttribute("id");
+
+        List<Order> orders = this.orderService.fetchOrdersByUserId(userId);
+        model.addAttribute("orders", orders);
+
+        return "client/cart/order-history";
+    }
+
+    @PostMapping("/add-product-form-view-detail")
+    public String postMethodName(@RequestParam("id") long id,
+            @RequestParam("quantity") long quantity,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("email");
+        this.productService.handeAddProductToCart(email, id, session, quantity);
 
         return "redirect:/";
     }

@@ -16,10 +16,6 @@ import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -55,19 +51,15 @@ public class HomePageController {
 
     @PostMapping("/register")
     public String handleRegister(@ModelAttribute("registerUser") @Valid RegisterDTO registerDTO,
-            BindingResult bindingResult) {
-
+            BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "/client/auth/register";
+            model.addAttribute("registerUser", registerDTO);
+            return "client/auth/register";
         }
-
         User user = this.userService.registerDTOtoUser(registerDTO);
-
         String hashPassword = this.passwordEncoder.encode(user.getPassword());
-
         user.setPassword(hashPassword);
         user.setRole(this.userService.getRoleByName("USER"));
-
         this.userService.handleSaveUser(user);
         return "redirect:/login";
     }
